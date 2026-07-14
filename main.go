@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 
 	"tetris-optimizer/internal/solver"
@@ -9,12 +10,12 @@ import (
 )
 
 func main() {
-	if err := run(os.Args[1:]); err != nil {
+	if err := run(os.Args[1:], os.Stdout); err != nil {
 		fmt.Println("ERROR")
 	}
 }
 
-func run(args []string) error {
+func run(args []string, output io.Writer) error {
 	if len(args) != 1 {
 		return tetromino.ErrInvalidFormat
 	}
@@ -28,6 +29,6 @@ func run(args []string) error {
 		return err
 	}
 
-	fmt.Println(solver.Solve(pieces))
+	fmt.Fprintln(output, solver.Solve(pieces))
 	return nil
 }
