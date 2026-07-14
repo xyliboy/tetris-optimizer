@@ -25,7 +25,7 @@ Do not add extra user-facing output.
 - `main.go`: validates command-line usage, reads the file, and prints the result.
 - `internal/tetromino/`: owns the piece model, normalization, parsing, and input validation.
 - `internal/solver/`: owns the square board and the backtracking search.
-- `AI/`: contains the original assignment and audit material. Treat these files as reference, not application code.
+- `AI/AGENT.md`: mirrors the root development guide for AI-assisted workflows.
 - `README.md`: explains installation, usage, input format, architecture, and development commands.
 
 ## Input rules
@@ -77,7 +77,3 @@ The project is ready only when:
 5. The hard example completes within the evaluator's time limit.
 6. The repository contains no debug output or temporary files.
 7. The README matches the final behavior.
-
-Do not remove `AI/info.txt` or `AI/audit.txt` during normal development. Remove
-them only after the user explicitly confirms that the project is ready for its
-final cleanup.
