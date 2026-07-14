@@ -1,6 +1,9 @@
 package tetromino
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestParseValidPieces(t *testing.T) {
 	input := "#...\n#...\n#...\n#...\n\n....\n.##.\n.##.\n....\n"
@@ -26,6 +29,27 @@ func TestParseAcceptsWindowsLineEndings(t *testing.T) {
 	}
 }
 
+func TestParseAcceptsMixedCommonLineEndings(t *testing.T) {
+	_, err := Parse("##..\r\n##..\n....\r\n....\n")
+	if err != nil {
+		t.Fatalf("Parse() rejected otherwise valid mixed line endings: %v", err)
+	}
+}
+
+func TestParseAcceptsBoundaryPieceCount(t *testing.T) {
+	grid := "##..\n##..\n....\n...."
+	pieces, err := Parse(strings.Repeat(grid+"\n\n", 25) + grid)
+	if err != nil {
+		t.Fatalf("Parse() rejected 26 pieces: %v", err)
+	}
+	if len(pieces) != 26 || pieces[25].Label != 'Z' {
+		t.Fatalf("Parse() did not label the boundary piece as Z: %+v", pieces[25])
+	}
+	if _, err := Parse(strings.Repeat(grid+"\n\n", 26) + grid); err == nil {
+		t.Fatal("Parse() accepted more labels than A-Z can represent")
+	}
+}
+
 func TestParseRejectsInvalidInput(t *testing.T) {
 	tests := map[string]string{
 		"empty file":          "",
@@ -36,6 +60,15 @@ func TestParseRejectsInvalidInput(t *testing.T) {
 		"too many blocks":     "####\n#...\n....\n....",
 		"disconnected blocks": "#.#.\n....\n#.#.\n....",
 		"extra separator":     "##..\n##..\n....\n....\n\n\n##..\n##..\n....\n....",
+		"leading newline":     "\n##..\n##..\n....\n....",
+		"trailing blank line": "##..\n##..\n....\n....\n\n",
+		"space separator":     "##..\n##..\n....\n....\n \n##..\n##..\n....\n....",
+		"spaces in grid":      "##  \n##..\n....\n....",
+		"tab in grid":         "##.\t\n##..\n....\n....",
+		"carriage returns":    "##..\r##..\r....\r....\r",
+		"diagonal chain":      "#...\n.#..\n..#.\n...#",
+		"two separate pairs":  "##..\n....\n##..\n....",
+		"nul byte":            "##..\n##..\n....\n...\x00",
 	}
 	for name, input := range tests {
 		t.Run(name, func(t *testing.T) {

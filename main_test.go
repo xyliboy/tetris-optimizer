@@ -26,6 +26,15 @@ func TestRunRejectsUnreadableOrMalformedFiles(t *testing.T) {
 	if err := run([]string{invalid}, &bytes.Buffer{}); err == nil {
 		t.Error("run() accepted malformed input")
 	}
+
+	empty := writeInput(t, "")
+	if err := run([]string{empty}, &bytes.Buffer{}); err == nil {
+		t.Error("run() accepted an empty file")
+	}
+
+	if err := run([]string{t.TempDir()}, &bytes.Buffer{}); err == nil {
+		t.Error("run() accepted a directory as input")
+	}
 }
 
 func TestRunPrintsSolvedBoard(t *testing.T) {
