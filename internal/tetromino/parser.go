@@ -60,5 +60,31 @@ func parseGrid(grid string) ([BlockCount]Point, error) {
 	if count != BlockCount {
 		return blocks, ErrInvalidFormat
 	}
+	if !isConnected(blocks) {
+		return blocks, ErrInvalidFormat
+	}
 	return blocks, nil
+}
+
+func isConnected(blocks [BlockCount]Point) bool {
+	occupied := make(map[Point]bool, BlockCount)
+	for _, block := range blocks {
+		occupied[block] = true
+	}
+
+	seen := map[Point]bool{blocks[0]: true}
+	queue := []Point{blocks[0]}
+	directions := [...]Point{{Row: -1}, {Row: 1}, {Col: -1}, {Col: 1}}
+	for len(queue) > 0 {
+		current := queue[0]
+		queue = queue[1:]
+		for _, direction := range directions {
+			next := Point{Row: current.Row + direction.Row, Col: current.Col + direction.Col}
+			if occupied[next] && !seen[next] {
+				seen[next] = true
+				queue = append(queue, next)
+			}
+		}
+	}
+	return len(seen) == BlockCount
 }
