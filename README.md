@@ -45,6 +45,8 @@ internal/tetromino/parser.go    file-format parsing and validation
 internal/tetromino/tetromino.go piece model and normalization
 internal/solver/board.go        board placement operations
 internal/solver/solver.go       smallest-square backtracking search
+examples/all_tetrominoes.txt    input with all seven tetromino types
+unit_test/                      parser, solver, and CLI tests
 ```
 
 This separation follows the program's data flow: parse and validate the input,

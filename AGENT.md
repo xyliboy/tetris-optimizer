@@ -25,7 +25,8 @@ Do not add extra user-facing output.
 - `main.go`: validates command-line usage, reads the file, and prints the result.
 - `internal/tetromino/`: owns the piece model, normalization, parsing, and input validation.
 - `internal/solver/`: owns the square board and the backtracking search.
-- `AI/AGENT.md`: mirrors this development guide for AI-assisted workflows.
+- `examples/`: contains ready-to-run valid input files.
+- `unit_test/`: contains the complete external test suite.
 - `README.md`: explains installation, usage, input format, architecture, and development commands.
 
 ## Input rules
